@@ -1,18 +1,19 @@
 //
-//  File.swift
+//  CharacterServiceProviderGroup.swift
 //  
 //
-//  Created by 112471 on 22.02.2022.
+//  Created by Salihcan Kahya on 22.02.2022.
 //
 
 import Foundation
 import DataLayerBase
 
-
 public protocol CharacterServiceProviderGroupProtocol {
-    func getCharacterListServiceProvider() -> 
+    func getCharacterListServiceProvider() -> GetCharacterListServiceProvider
 }
 
-final class CharacterServiceProviderGroup: BaseServiceProviderGroup, CharacterServiceProviderGroup {
-    
+final class CharacterServiceProviderGroup: BaseServiceProviderGroup, CharacterServiceProviderGroupProtocol {
+    func getCharacterListServiceProvider() -> GetCharacterListServiceProvider {
+        GetCharacterListServiceProvider(httpPropertyProvider: httpProperyProvider)
+    }
 }

@@ -7,7 +7,13 @@
 
 import Foundation
 import DataLayerBase
+import MarvelDomainLayer
+import Combine
 
-final class CharacterApiRemote: BaseApiRemote {
-    
+final class CharacterApiRemote: BaseApiRemote<CharacterServiceProviderGroupProtocol> {
+    func getCharacterList() -> AnyPublisher<(CharacterListResponse?, ServerErrorSample?), Error> {
+        networkManager.execute(with: serviceProviderGroup.getCharacterListServiceProvider())
+    }
 }
+
+struct ServerErrorSample: Decodable { }

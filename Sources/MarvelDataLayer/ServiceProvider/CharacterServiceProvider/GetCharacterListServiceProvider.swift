@@ -1,13 +1,14 @@
 //
-//  File.swift
+//  GetCharacterListServiceProvider.swift
 //  
 //
-//  Created by 112471 on 22.02.2022.
+//  Created by Salihcan Kahya on 22.02.2022.
 //
 
-import Foundation
 import NetworkLayer
 
-final class GetCharacterListServiceProvider: ApiServiceProvider {
-    
+public final class GetCharacterListServiceProvider: ApiServiceProvider {
+    public init(httpPropertyProvider: HttpPropertyProviderProtocol) {
+        super.init(httpPropertyProvider: httpPropertyProvider, path: URLBase.Path.characterList.description)
+    }
 }
