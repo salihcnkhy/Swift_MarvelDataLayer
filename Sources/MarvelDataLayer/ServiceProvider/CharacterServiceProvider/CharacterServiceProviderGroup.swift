@@ -7,13 +7,14 @@
 
 import Foundation
 import DataLayerBase
+import MarvelDomainLayer
 
 public protocol CharacterServiceProviderGroupProtocol {
-    func getCharacterListServiceProvider() -> GetCharacterListServiceProvider
+    func getCharacterListServiceProvider(with request: CharacterListRequest) -> GetCharacterListServiceProvider
 }
 
 final class CharacterServiceProviderGroup: BaseServiceProviderGroup, CharacterServiceProviderGroupProtocol {
-    func getCharacterListServiceProvider() -> GetCharacterListServiceProvider {
-        GetCharacterListServiceProvider(httpPropertyProvider: httpProperyProvider)
+    func getCharacterListServiceProvider(with request: CharacterListRequest) -> GetCharacterListServiceProvider {
+        GetCharacterListServiceProvider(httpPropertyProvider: httpProperyProvider, with: request)
     }
 }

@@ -6,9 +6,10 @@
 //
 
 import NetworkLayer
+import MarvelDomainLayer
 
 public final class GetCharacterListServiceProvider: ApiServiceProvider {
-    public init(httpPropertyProvider: HttpPropertyProviderProtocol) {
-        super.init(httpPropertyProvider: httpPropertyProvider, path: URLBase.Path.characterList.description)
+    public init(httpPropertyProvider: HttpPropertyProviderProtocol, with request: CharacterListRequest) {
+        super.init(httpPropertyProvider: httpPropertyProvider, path: URLBase.Path.characterList.description, data: request)
     }
 }
