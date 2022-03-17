@@ -10,8 +10,8 @@ import DataLayerBase
 import MarvelDomainLayer
 import Combine
 
-final class CharacterApiRemote: BaseApiRemote<CharacterServiceProviderGroupProtocol>, CharacterApiRemoteProtocol {
-    func getCharacterList(with request: CharacterListRequest) -> AnyPublisher<MarvelCharacterListResponse, MarvelServerErrorResponse> {
+public final class CharacterApiRemote: BaseApiRemote<CharacterServiceProviderGroupProtocol>, CharacterApiRemoteProtocol {
+    public func getCharacterList(with request: CharacterListRequest) -> AnyPublisher<MarvelCharacterListResponse, MarvelServerErrorResponse> {
         networkManager.execute(with: serviceProviderGroup.getCharacterListServiceProvider(with: request))
     }
 }

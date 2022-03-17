@@ -9,8 +9,8 @@ import Combine
 import MarvelDomainLayer
 import DataLayerBase
 
-final class CharacterRepository: BaseRepository<CharacterApiRemoteProtocol>, CharacterRepositoryProtocol {
-    func getCharacterList(with request: CharacterListRequest) -> AnyPublisher<MarvelCharacterListResponse, MarvelServerErrorResponse> {
+public final class CharacterRepository: BaseRepository<CharacterApiRemoteProtocol>, CharacterRepositoryProtocol {
+    public func getCharacterList(with request: CharacterListRequest) -> AnyPublisher<MarvelCharacterListResponse, MarvelServerErrorResponse> {
         apiRemote.getCharacterList(with: request)
     }
 }

@@ -10,7 +10,7 @@ import MarvelDomainLayer
 final class MarvelDataLayerTests: XCTestCase {
     
     static let networkManager = NetworkManager(configuration: .default, interceptor: .interceptor(), eventMonitors: [TestEventMonitor()])
-    static let characterApiRemote: CharacterApiRemoteProtocol = CharacterApiRemote(networkManager: networkManager, serviceProviderGroup: CharacterServiceProviderGroup(httpProperyProvider: MarvelHttpPropertyProvider()))
+    static let characterApiRemote: CharacterApiRemoteProtocol = CharacterApiRemote(networkManager: networkManager, serviceProviderGroup: CharacterServiceProviderGroup(httpProperyProvider: MockMarvelHttpPropertyProvider()))
     let characterRepository: CharacterRepositoryProtocol = CharacterRepository(apiRemote: characterApiRemote)
     
     var cancellables = Set<AnyCancellable>()
@@ -18,17 +18,29 @@ final class MarvelDataLayerTests: XCTestCase {
     
     func testExample() throws {
         let expectation = expectation(description: "Sink")
-        characterRepository.getCharacterList(with: CharacterListRequest(offset: 0, limit: 1, nameStartsWith: "Spider")).sink(receiveCompletion: { completion in
-            switch completion {
-                case .failure(let error):
-                    print("ERROR", error)
-                case .finished:
-                    expectation.fulfill()
+        
+        createRequest(offset: 0, limit: 10, nameStartsWith: "Spider")
+            .flatMap { [unowned self] model -> AnyPublisher<MarvelCharacterListResponse, MarvelServerErrorResponse> in
+                print(model.data.results.compactMap { $0.name }.joined(separator: " ") )
+                return self.createRequest(offset: 10, limit: 10, nameStartsWith: "Spider")
             }
-        }, receiveValue: { (response) in
-            print(response)
-        }).store(in: &cancellables)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                    case .failure(let error):
+                        print("ERROR", error)
+                    case .finished:
+                        expectation.fulfill()
+                }
+            }, receiveValue: { (response) in
+                print(response.data.results.compactMap { $0.name }.joined(separator: " "))
+            })
+            .store(in: &self.cancellables)
+        
         waitForExpectations(timeout: 10)
+    }
+    
+    func createRequest(offset: Int, limit: Int, nameStartsWith: String? = nil) -> AnyPublisher<MarvelCharacterListResponse, MarvelServerErrorResponse> {
+        characterRepository.getCharacterList(with: CharacterListRequest(offset: offset, limit: limit, nameStartsWith: nameStartsWith))
     }
 }
 
@@ -38,14 +50,14 @@ final class TestEventMonitor: EventMonitor {
     }
     
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
-        print(String(data: data, encoding: .utf8) ?? "SOME NIL")
+        //print(String(data: data, encoding: .utf8) ?? "SOME NIL")
     }
 }
 
-struct MarvelHttpPropertyProvider: HttpPropertyProviderProtocol {
+struct MockMarvelHttpPropertyProvider: HttpPropertyProviderProtocol {
     
-    let privateAPIKey = "043babe1d073082979adfcbc83875f75fc40578e8"
-    let publicAPIKey = "4b1f0997b147a27pbac7142f3145c0eee"
+    let privateAPIKey = "043babe1d07308979adfcbc83875f75fc40578e8"
+    let publicAPIKey = "4b1f0997b147a27bac7142f3145c0eee"
     
     func getBaseUrl() -> String {
         URLBase.prod.description
