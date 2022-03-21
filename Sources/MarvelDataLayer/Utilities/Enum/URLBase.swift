@@ -18,11 +18,14 @@ public protocol URLPathProviderProtocol {
 public enum URLBase: StringDescription {
     
     case prod
+    case prodImage//(character: String, code: String, id: String, )
     
     public var description: String {
         switch self {
             case .prod:
                 return "https://gateway.marvel.com:443/v1/public/"
+            case .prodImage:
+                return "http://i.annihil.us/u/prod/marvel/i/mg/"
         }
     }
     

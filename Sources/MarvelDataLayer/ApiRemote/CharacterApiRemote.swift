@@ -5,7 +5,6 @@
 //  Created by 112471 on 22.02.2022.
 //
 
-import Foundation
 import DataLayerBase
 import MarvelDomainLayer
 import Combine
